@@ -36,10 +36,40 @@ const TravelCard = (props) => {
             <h3>{props.travel.title}</h3>
             <p style={{ color: '#666', fontWeight: 'bold' }}>{props.travel.country}</p>
             <p>{props.travel.description}</p>
+            <LikeButton likes={props.travel.likes} onLike={props.onLike} />
         </div>
     );
 };
+
+const LikeButton = ({ likes, onLike }) => {
+    const [liked, setLiked] = React.useState(false);
+
+    const handleClick = () => {
+        if (!liked) {
+            setLiked(true);
+            onLike();
+        }
+    };
+
+    const buttonStyle = {
+        background: liked ? '#ff6b6b' : 'none',
+        border: '1px solid #ff6b6b',
+        color: liked ? 'white' : '#ff6b6b',
+        padding: '8px 16px',
+        borderRadius: '20px',
+        cursor: 'pointer'
+    };
+
+    return (
+        <button style={buttonStyle} onClick={handleClick}>
+            ♥ {likes}
+        </button>
+    );
+};
 function App() {
+    const handleLike = (id) => {
+        console.log('Лайк для', id);
+    };
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
             <h1 style={{ textAlign: 'center', color: '#333' }}>Каталог путешествий</h1>
@@ -50,7 +80,7 @@ function App() {
                 gap: '20px'
             }}>
                 {mockTravels.map(travel => (
-                    <TravelCard key={travel.id} travel={travel} />
+                    <TravelCard key={travel.id} travel={travel} onLike={() => handleLike(travel.id)} />
                 ))}
             </div>
         </div>
