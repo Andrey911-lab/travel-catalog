@@ -23,6 +23,22 @@ const mockTravels = [
         likes: 12
     }
 ];
+
+const TravelCard = (props) => {
+    return (
+        <div style={{
+            border: '1px solid #ddd',
+            borderRadius: '8px',
+            padding: '16px',
+            margin: '12px',
+            backgroundColor: 'white'
+        }}>
+            <h3>{props.travel.title}</h3>
+            <p style={{ color: '#666', fontWeight: 'bold' }}>{props.travel.country}</p>
+            <p>{props.travel.description}</p>
+        </div>
+    );
+};
 function App() {
     return (
         <div>
