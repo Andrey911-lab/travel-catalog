@@ -41,8 +41,18 @@ const TravelCard = (props) => {
 };
 function App() {
     return (
-        <div>
-            <h1>Каталог путешествий</h1>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+            <h1 style={{ textAlign: 'center', color: '#333' }}>Каталог путешествий</h1>
+
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gap: '20px'
+            }}>
+                {mockTravels.map(travel => (
+                    <TravelCard key={travel.id} travel={travel} />
+                ))}
+            </div>
         </div>
     );
 }
