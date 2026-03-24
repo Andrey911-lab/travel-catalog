@@ -91,6 +91,68 @@ const Filter = ({ countries, selectedCountry, onFilterChange }) => {
         </div>
     );
 };
+
+const AddForm = ({ onAdd }) => {
+    const [formData, setFormData] = useState({
+        country: '',
+        title: '',
+        description: ''
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (formData.country && formData.title && formData.description) {
+            onAdd({
+                ...formData,
+                id: Date.now(),
+                likes: 0
+            });
+            setFormData({ country: '', title: '', description: '' });
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} style={{
+            margin: '20px',
+            padding: '20px',
+            backgroundColor: '#f9f9f9',
+            borderRadius: '8px'
+        }}>
+            <h3>Добавить новое путешествие</h3>
+            <input
+                type="text"
+                placeholder="Страна"
+                value={formData.country}
+                onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+                style={{ width: '100%', padding: '8px', margin: '8px 0' }}
+            />
+            <input
+                type="text"
+                placeholder="Название"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                style={{ width: '100%', padding: '8px', margin: '8px 0' }}
+            />
+            <textarea
+                placeholder="Описание"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                style={{ width: '100%', padding: '8px', margin: '8px 0', minHeight: '80px' }}
+            />
+            <button type="submit" style={{
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                padding: '10px 20px',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+            }}>
+                Добавить
+            </button>
+        </form>
+    );
+};
+
 function App() {
     const [travels, setTravels] = useState(mockTravels);
     const [selectedCountry, setSelectedCountry] = useState('');
@@ -105,6 +167,10 @@ function App() {
                 : travel
         ));
     };
+    const handleAddTravel = (newTravel) => {
+        setTravels([...travels, newTravel]);
+    };
+
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
             <h1 style={{ textAlign: 'center', color: '#333' }}>Каталог путешествий</h1>
@@ -114,6 +180,8 @@ function App() {
                 selectedCountry={selectedCountry}
                 onFilterChange={setSelectedCountry}
             />
+
+            <AddForm onAdd={handleAddTravel} />
 
             <div style={{
                 display: 'grid',
