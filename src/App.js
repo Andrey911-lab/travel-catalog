@@ -21,6 +21,13 @@ const mockTravels = [
         title: 'Вкусный Париж',
         description: 'Круассаны, сыры и Эйфелева башня',
         likes: 12
+    },
+    {
+        id: 4,
+        country: 'Россия',
+        title: 'Красная площадь в Москве',
+        description: 'Собор Василия Блаженного и Кремль',
+        likes: 42
     }
 ];
 
@@ -66,8 +73,31 @@ const LikeButton = ({ likes, onLike }) => {
         </button>
     );
 };
+
+const Filter = ({ countries, selectedCountry, onFilterChange }) => {
+    return (
+        <div style={{ margin: '20px', padding: '10px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+            <label>Фильтр по стране: </label>
+            <select
+                value={selectedCountry}
+                onChange={(e) => onFilterChange(e.target.value)}
+                style={{ marginLeft: '10px', padding: '5px' }}
+            >
+                <option value="">Все страны</option>
+                {countries.map(country => (
+                    <option key={country} value={country}>{country}</option>
+                ))}
+            </select>
+        </div>
+    );
+};
 function App() {
     const [travels, setTravels] = useState(mockTravels);
+    const [selectedCountry, setSelectedCountry] = useState('');
+    const countries = [...new Set(travels.map(t => t.country))];
+    const filteredTravels = selectedCountry
+        ? travels.filter(t => t.country === selectedCountry)
+        : travels;
     const handleLike = (id) => {
         setTravels(travels.map(travel =>
             travel.id === id
@@ -79,12 +109,18 @@ function App() {
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
             <h1 style={{ textAlign: 'center', color: '#333' }}>Каталог путешествий</h1>
 
+            <Filter
+                countries={countries}
+                selectedCountry={selectedCountry}
+                onFilterChange={setSelectedCountry}
+            />
+
             <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                 gap: '20px'
             }}>
-                {travels.map(travel => (
+                {filteredTravels.map(travel => (
                     <TravelCard key={travel.id} travel={travel} onLike={() => handleLike(travel.id)} />
                 ))}
             </div>
