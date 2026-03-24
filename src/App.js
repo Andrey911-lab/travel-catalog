@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 
 const mockTravels = [
     {
@@ -67,8 +67,13 @@ const LikeButton = ({ likes, onLike }) => {
     );
 };
 function App() {
+    const [travels, setTravels] = useState(mockTravels);
     const handleLike = (id) => {
-        console.log('Лайк для', id);
+        setTravels(travels.map(travel =>
+            travel.id === id
+                ? { ...travel, likes: travel.likes + 1 }
+                : travel
+        ));
     };
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
@@ -79,7 +84,7 @@ function App() {
                 gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                 gap: '20px'
             }}>
-                {mockTravels.map(travel => (
+                {travels.map(travel => (
                     <TravelCard key={travel.id} travel={travel} onLike={() => handleLike(travel.id)} />
                 ))}
             </div>
